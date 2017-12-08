@@ -31,7 +31,7 @@
                   String imagePath = data.getStringExtra("imagePath");
                   /**
                    * 在下面进行你的逻辑判断
-                   * csVideo只会返回一个路径,不是视频路径,就是视频路径
+                   * csVideo只会返回一个路径,不是视频路径,就是图片路径
                    * 当然后面还会继续优化,比如视频第一帧图,或者图片原图路径和裁剪路径一起返回
                    */
 
