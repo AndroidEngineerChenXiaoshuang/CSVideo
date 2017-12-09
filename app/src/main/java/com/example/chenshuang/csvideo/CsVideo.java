@@ -28,6 +28,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -119,26 +120,28 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.carmer_layout);
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
         List<String> permissions = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.CAMERA);
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.RECORD_AUDIO);
         }
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
         if (permissions.size() > 0) {
-            ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]), 1);
-        } else {
+            ActivityCompat.requestPermissions(CsVideo.this, permissions.toArray(new String[permissions.size()]), 1);
+        }else{
+            setContentView(R.layout.carmer_layout);
+            if (Build.VERSION.SDK_INT >= 21) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
+            }
             initView();
         }
+
+
     }
 
 
@@ -153,12 +156,17 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
             if (grantResults.length > 0 ) {
                 for(int result : grantResults){
                     if(result != PackageManager.PERMISSION_GRANTED){
+                        Toast.makeText(CsVideo.this,"授权失败!",Toast.LENGTH_SHORT).show();
+                        finish();
                         return ;
                     }
                 }
+                setContentView(R.layout.carmer_layout);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                    getWindow().setStatusBarColor(Color.TRANSPARENT);
+                }
                 initView();
-            } else {
-                Toast.makeText(this, "授权失败无法启动相机!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -236,7 +244,11 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
             }
         });
 
-        surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
+        surfaceView = new SurfaceView(this);
+
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        parent.addView(surfaceView,0,layoutParams);
 
         surfaceView.setOnTouchListener(this);
 
@@ -260,11 +272,11 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
             camera = Camera.open(cameraId);
         }catch (RuntimeException e){
             if ("Fail to connect to camera service".equals(e.getMessage())) {
-                Toast.makeText(CsVideo.this,"无法打开相机，请检查是否已经开启权限", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CsVideo.this,"无法打开相机，请检查是否已经开启权限",Toast.LENGTH_SHORT).show();
             } else if ("Camera initialization failed".equals(e.getMessage())) {
-                Toast.makeText(CsVideo.this,"相机初始化失败，无法打开", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CsVideo.this,"相机初始化失败，无法打开",Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(CsVideo.this,"相机发生未知错误，无法打开", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CsVideo.this,"相机发生未知错误，无法打开",Toast.LENGTH_SHORT).show();
             }
             finish();
             return;
@@ -556,7 +568,7 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
             }else if(cameraId == Camera.CameraInfo.CAMERA_FACING_FRONT){
                 rotation = -90;
             }else{
-                Toast.makeText(CsVideo.this,"发生未知错误!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CsVideo.this,"发生未知错误!",Toast.LENGTH_SHORT).show();
                 mWaitForTakePhoto = false;
                 return;
             }
@@ -567,7 +579,7 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
             bm.compress(Bitmap.CompressFormat.JPEG,100,new FileOutputStream(imageFile));
             startUcrop("file://"+imageFile.getPath());
         }else{
-            Toast.makeText(CsVideo.this,"发生未知错误!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CsVideo.this,"发生未知错误!",Toast.LENGTH_SHORT).show();
             mWaitForTakePhoto = false;
         }
 
@@ -829,7 +841,7 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
                         setResult(RESULT_OK,intent);
                         finish();
                     }else{
-                        Toast.makeText(CsVideo.this,"文件可能被移动或者被删除", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CsVideo.this,"文件可能被移动或者被删除",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
