@@ -10,4 +10,10 @@
 
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
 
+    <style name="CropActivityStyle" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimaryDark">#393a3d</item>
+    </style>
+
 </resources>

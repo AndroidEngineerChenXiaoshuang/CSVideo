@@ -49,7 +49,8 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
     public static final int REQUEST_CROP = 2;
 
 
-    public boolean mWaitForTakePhoto;
+    public static boolean mWaitForTakePhoto = true;
+
 
     public File imageFile;
 
@@ -120,6 +121,11 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.carmer_layout);
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
         List<String> permissions = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.CAMERA);
@@ -133,11 +139,6 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
         if (permissions.size() > 0) {
             ActivityCompat.requestPermissions(CsVideo.this, permissions.toArray(new String[permissions.size()]), 1);
         }else{
-            setContentView(R.layout.carmer_layout);
-            if (Build.VERSION.SDK_INT >= 21) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-            }
             initView();
         }
 
@@ -160,11 +161,6 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
                         finish();
                         return ;
                     }
-                }
-                setContentView(R.layout.carmer_layout);
-                if (Build.VERSION.SDK_INT >= 21) {
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                    getWindow().setStatusBarColor(Color.TRANSPARENT);
                 }
                 initView();
             }

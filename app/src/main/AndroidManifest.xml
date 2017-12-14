@@ -29,7 +29,7 @@
         <activity
             android:name="com.example.chenshuang.csvideo.CropImageViewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar" />
+            android:theme="@style/CropActivityStyle" />
 
         <!--视频录制的界面-->
         <activity

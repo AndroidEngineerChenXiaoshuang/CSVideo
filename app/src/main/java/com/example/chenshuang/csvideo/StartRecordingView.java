@@ -3,7 +3,6 @@ package com.example.chenshuang.csvideo;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -94,7 +93,6 @@ public class StartRecordingView extends View {
         mPaint3.setStyle(Paint.Style.STROKE);
     }
 
-    @SuppressLint("NewApi")
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, circleLength1, mPaint1);
@@ -115,7 +113,7 @@ public class StartRecordingView extends View {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (!isUp) {
+                        if (!isUp && !CsVideo.mWaitForTakePhoto) {
                             startAnimator(1);
                         }
                     }

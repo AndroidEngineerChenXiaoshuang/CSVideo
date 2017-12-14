@@ -1,27 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hydom.scnews.view.CropImageViewActivity">
+    android:background="#000">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#393a3d"
+        android:id="@+id/topBar">
+        <ImageView
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_close_black_24dp"
+            android:padding="15dp"
+            android:onClick="close"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:text="裁剪"
+            android:textColor="#fff"
+            android:layout_centerInParent="true"/>
+
+
+        <ImageView
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:src="@drawable/sure_24dp"
+            android:padding="15dp"
+            android:layout_alignParentRight="true"
+            android:onClick="sure"/>
+    </RelativeLayout>
 
     <com.theartofdev.edmodo.cropper.CropImageView
         android:id="@+id/cropImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="40dp"
-        />
+        android:layout_below="@+id/topBar"
+        android:layout_above="@+id/bottomLayout"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"/>
 
-    <TextView
-        android:id="@+id/yes"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#fff"
+        android:id="@+id/bottomLayout"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="#c00"
-        android:gravity="center"
-        android:text="确认"
-        android:textColor="#fff" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="2.5dp">
 
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/circleback"
+            android:layout_marginLeft="25dp"/>
+
+        <ImageView
+            android:scaleType="centerCrop"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/image"/>
+    </LinearLayout>
 
 </RelativeLayout>
