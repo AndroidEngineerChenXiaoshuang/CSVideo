@@ -49,9 +49,6 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
     public static final int REQUEST_CROP = 2;
 
 
-    public static boolean mWaitForTakePhoto = true;
-
-
     public File imageFile;
 
 
@@ -198,6 +195,7 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
 
             @Override
             public void stop() {
+                startRecordingView.setEnable(false);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -214,11 +212,13 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
                                 if(childFile.exists()){
                                     childFile.delete();
                                 }
+                                startRecordingView.setEnable(true);
                             }
                         }else{
                             if(childFile.exists()){
                                 childFile.delete();
                             }
+                            startRecordingView.setEnable(true);
                         }
 
 
@@ -523,9 +523,9 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
             public void run() {
                 try {
                     if(camera != null){
-                        mWaitForTakePhoto = false;
                         camera.setPreviewDisplay(surfaceHolder);
                         camera.startPreview();
+                        startRecordingView.setEnable(true);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -538,10 +538,10 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
 
 
     private void takePhoto() {
-        if (camera == null || mWaitForTakePhoto) {
+        if (camera == null || !startRecordingView.isEnable()) {
             return;
         }
-        mWaitForTakePhoto = true;
+        startRecordingView.setEnable(false);
         camera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
@@ -565,7 +565,7 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
                 rotation = -90;
             }else{
                 Toast.makeText(CsVideo.this,"发生未知错误!",Toast.LENGTH_SHORT).show();
-                mWaitForTakePhoto = false;
+                startRecordingView.setEnable(true);
                 return;
             }
             Bitmap bm0 = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -576,7 +576,7 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
             startUcrop("file://"+imageFile.getPath());
         }else{
             Toast.makeText(CsVideo.this,"发生未知错误!",Toast.LENGTH_SHORT).show();
-            mWaitForTakePhoto = false;
+            startRecordingView.setEnable(true);
         }
 
     }
@@ -852,6 +852,7 @@ public class CsVideo extends AppCompatActivity implements SurfaceHolder.Callback
         overridePendingTransition(R.anim.translation_in2,R.anim.translation_out2);
         finish();
     }
+
 
     /**
      * dp转换成px

@@ -42,6 +42,8 @@ public class StartRecordingView extends View {
     //标识手指是否抬起
     public boolean isUp = true;
 
+    public boolean enable;
+
     //动画开关
     public int flag = 0;
 
@@ -107,24 +109,26 @@ public class StartRecordingView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                isUp = false;
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isUp && !CsVideo.mWaitForTakePhoto) {
-                            startAnimator(1);
+        if(isEnable()){
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    isUp = false;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isUp) {
+                                startAnimator(1);
+                            }
                         }
-                    }
-                }, 500);
-                break;
+                    }, 500);
+                    break;
 
-            case MotionEvent.ACTION_UP:
-                isUp = true;
-                flag = 0;
-                startAnimator(2);
-                break;
+                case MotionEvent.ACTION_UP:
+                    isUp = true;
+                    flag = 0;
+                    startAnimator(2);
+                    break;
+            }
         }
         return true;
     }
@@ -228,6 +232,14 @@ public class StartRecordingView extends View {
             animator3.start();
         }
 
+    }
+
+    public void setEnable(boolean enable){
+        this.enable = enable;
+    }
+
+    public boolean isEnable(){
+        return enable;
     }
 
     /**
